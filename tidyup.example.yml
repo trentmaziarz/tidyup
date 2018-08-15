@@ -1,0 +1,11 @@
+target: ~/Downloads
+rules:
+  - name: images
+    match: ["*.jpg", "*.jpeg", "*.png", "*.gif"]
+    dest: ~/Pictures/unsorted
+  - name: pdfs
+    match: ["*.pdf"]
+    dest: ~/Documents/pdf
+  - name: archives
+    match: ["*.zip", "*.tar.gz", "*.7z"]
+    dest: ~/Downloads/archives
