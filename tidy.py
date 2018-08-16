@@ -15,9 +15,11 @@ def load():
 
 
 def unique(path):
+    # foo.jpg -> foo (1).jpg, not foo.jpg (1)
+    base, ext = os.path.splitext(path)
     n = 1
     while os.path.exists(path):
-        path = '%s (%d)' % (path, n)
+        path = '%s (%d)%s' % (base, n, ext)
         n += 1
     return path
 
