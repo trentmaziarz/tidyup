@@ -14,6 +14,14 @@ def load():
         return yaml.load(f)
 
 
+def unique(path):
+    n = 1
+    while os.path.exists(path):
+        path = '%s (%d)' % (path, n)
+        n += 1
+    return path
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--dry-run', action='store_true')
@@ -32,8 +40,9 @@ def main():
                 break
             if not os.path.isdir(dest):
                 os.makedirs(dest)
-            shutil.move(os.path.join(target, name), os.path.join(dest, name))
-            print('moved', name)
+            final = unique(os.path.join(dest, name))
+            shutil.move(os.path.join(target, name), final)
+            print('moved %s -> %s' % (name, final))
             break
 
 
