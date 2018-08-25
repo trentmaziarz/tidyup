@@ -7,4 +7,7 @@ setup(
     author='Trent Maziarz',
     packages=find_packages(exclude=['tests']),
     install_requires=['PyYAML'],
+    entry_points={
+        'console_scripts': ['tidyup = tidyup.cli:main'],
+    },
 )
