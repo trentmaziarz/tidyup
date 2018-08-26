@@ -22,6 +22,7 @@ def load(path):
     with open(path) as f:
         data = yaml.load(f)
     target = data['target']
+    target = os.path.expanduser(target)
 
     rules = []
     for i, r in enumerate(data['rules']):
@@ -29,6 +30,9 @@ def load(path):
         if isinstance(patterns, str):
             patterns = [patterns]
         dest = r['dest']
+        dest = os.path.expanduser(dest)
+        if not os.path.isabs(dest):
+            dest = os.path.join(target, dest)
         name = r.get('name', 'rule %d' % (i + 1))
         rules.append(Rule(name, patterns, dest))
     return target, rules

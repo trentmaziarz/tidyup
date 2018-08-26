@@ -40,3 +40,14 @@ def test_matches():
     assert r.matches('/a/b/c.jpg')
     assert r.matches('c.png')
     assert not r.matches('/a/b/c.txt')
+
+
+def test_relative_dest_goes_under_target(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - match: "*.pdf"
+    dest: pdf
+""")
+    target, rules = load(path)
+    assert rules[0].dest == '/tmp/dl/pdf'
