@@ -1,0 +1,42 @@
+from tidyup.rules import Rule, load
+
+
+def write(tmpdir, text):
+    p = tmpdir.join('rules.yml')
+    p.write(text)
+    return str(p)
+
+
+def test_load_basic(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - name: images
+    match: ["*.jpg", "*.png"]
+    dest: /tmp/pics
+""")
+    target, rules = load(path)
+    assert target == '/tmp/dl'
+    assert len(rules) == 1
+    assert rules[0].name == 'images'
+    assert rules[0].patterns == ['*.jpg', '*.png']
+    assert rules[0].dest == '/tmp/pics'
+
+
+def test_match_can_be_one_string(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - match: "*.pdf"
+    dest: /tmp/pdf
+""")
+    target, rules = load(path)
+    assert rules[0].patterns == ['*.pdf']
+    assert rules[0].name == 'rule 1'
+
+
+def test_matches():
+    r = Rule('x', ['*.jpg', '*.png'], '/tmp')
+    assert r.matches('/a/b/c.jpg')
+    assert r.matches('c.png')
+    assert not r.matches('/a/b/c.txt')
