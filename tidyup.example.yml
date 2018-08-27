@@ -9,3 +9,7 @@ rules:
   - name: archives
     match: ["*.zip", "*.tar.gz", "*.7z"]
     dest: ~/Downloads/archives
+  - name: old installers
+    match: ["*.exe", "*.msi", "*.deb"]
+    older_than: 30
+    dest: ~/Downloads/old
