@@ -1,3 +1,6 @@
+import os
+import time
+
 from tidyup.rules import Rule, load
 
 
@@ -51,3 +54,14 @@ rules:
 """)
     target, rules = load(path)
     assert rules[0].dest == '/tmp/dl/pdf'
+
+
+def test_older_than(tmpdir):
+    f = tmpdir.join('setup.exe')
+    f.write('x')
+    r = Rule('old', ['*.exe'], '/tmp', older_than=30)
+    assert not r.matches(str(f))
+
+    past = time.time() - 40 * 86400
+    os.utime(str(f), (past, past))
+    assert r.matches(str(f))
