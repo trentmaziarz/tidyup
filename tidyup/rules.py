@@ -5,6 +5,10 @@ import time
 import yaml
 
 
+class ConfigError(Exception):
+    pass
+
+
 class Rule(object):
 
     def __init__(self, name, patterns, dest, older_than=None):
@@ -27,11 +31,17 @@ class Rule(object):
 def load(path):
     with open(path) as f:
         data = yaml.load(f)
+    if not isinstance(data, dict):
+        raise ConfigError('%s: expected a mapping at the top level' % path)
+    if 'target' not in data:
+        raise ConfigError('%s: no target' % path)
     target = data['target']
     target = os.path.expanduser(target)
 
     rules = []
-    for i, r in enumerate(data['rules']):
+    for i, r in enumerate(data.get('rules') or []):
+        if 'dest' not in r:
+            raise ConfigError('rule %d: no dest' % (i + 1))
         patterns = r['match']
         if isinstance(patterns, str):
             patterns = [patterns]

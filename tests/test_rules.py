@@ -1,7 +1,9 @@
 import os
 import time
 
-from tidyup.rules import Rule, load
+import pytest
+
+from tidyup.rules import Rule, load, ConfigError
 
 
 def write(tmpdir, text):
@@ -65,3 +67,15 @@ def test_older_than(tmpdir):
     past = time.time() - 40 * 86400
     os.utime(str(f), (past, past))
     assert r.matches(str(f))
+
+
+def test_no_target(tmpdir):
+    path = write(tmpdir, "rules: []\n")
+    with pytest.raises(ConfigError):
+        load(path)
+
+
+def test_not_a_mapping(tmpdir):
+    path = write(tmpdir, "- just\n- a list\n")
+    with pytest.raises(ConfigError):
+        load(path)

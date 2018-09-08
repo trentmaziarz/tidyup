@@ -1,8 +1,9 @@
 import argparse
 import os
+import sys
 
 from . import mover
-from .rules import load
+from .rules import load, ConfigError
 
 DEFAULT_CONFIG = '~/.tidyup.yml'
 
@@ -13,7 +14,10 @@ def main():
     parser.add_argument('-n', '--dry-run', action='store_true')
     args = parser.parse_args()
 
-    target, rules = load(os.path.expanduser(args.config))
+    try:
+        target, rules = load(os.path.expanduser(args.config))
+    except ConfigError as e:
+        sys.exit('tidyup: %s' % e)
 
     for src, dest in mover.plan(target, rules):
         if args.dry_run:
