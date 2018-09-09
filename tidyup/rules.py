@@ -40,6 +40,8 @@ def load(path):
 
     rules = []
     for i, r in enumerate(data.get('rules') or []):
+        if 'match' not in r:
+            raise ConfigError('rule %d: no match' % (i + 1))
         if 'dest' not in r:
             raise ConfigError('rule %d: no dest' % (i + 1))
         patterns = r['match']

@@ -79,3 +79,13 @@ def test_not_a_mapping(tmpdir):
     path = write(tmpdir, "- just\n- a list\n")
     with pytest.raises(ConfigError):
         load(path)
+
+
+def test_rule_without_match(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - dest: /tmp/pics
+""")
+    with pytest.raises(ConfigError):
+        load(path)
