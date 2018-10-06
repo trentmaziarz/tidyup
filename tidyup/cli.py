@@ -1,37 +1,46 @@
-import argparse
 import os
-import sys
 
-from . import mover
+import click
+
+from . import __version__, mover
 from .rules import load, ConfigError
 
 DEFAULT_CONFIG = '~/.tidyup.yml'
 
 
-def main():
-    parser = argparse.ArgumentParser(prog='tidyup')
-    parser.add_argument('-c', '--config', default=DEFAULT_CONFIG)
-    parser.add_argument('-n', '--dry-run', action='store_true')
-    parser.add_argument('--check', action='store_true',
-                        help='only validate the config')
-    args = parser.parse_args()
-
+def read_config(path):
     try:
-        target, rules = load(os.path.expanduser(args.config))
+        return load(os.path.expanduser(path))
     except ConfigError as e:
-        sys.exit('tidyup: %s' % e)
-
-    if args.check:
-        print('%s: ok, %d rules' % (args.config, len(rules)))
-        return
-
-    for src, dest in mover.plan(target, rules):
-        if args.dry_run:
-            print('would move %s -> %s' % (src, dest))
-        else:
-            dest = mover.move(src, dest)
-            print('%s -> %s' % (src, dest))
+        raise click.ClickException(str(e))
+    except IOError as e:
+        raise click.ClickException('%s: %s' % (path, e.strerror))
 
 
-if __name__ == '__main__':
-    main()
+@click.group()
+@click.version_option(__version__)
+def main():
+    """Sort a downloads folder by rules in a YAML file."""
+
+
+@main.command()
+@click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
+@click.option('-n', '--dry-run', is_flag=True, help='show what would move and stop')
+def run(config, dry_run):
+    """Move files according to the rules."""
+    target, rules = read_config(config)
+    moves = mover.plan(target, rules)
+    for src, dest in moves:
+        if dry_run:
+            click.echo('would move %s -> %s' % (src, dest))
+            continue
+        dest = mover.move(src, dest)
+        click.echo('%s -> %s' % (src, dest))
+
+
+@main.command()
+@click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
+def check(config):
+    """Validate the rules file and exit."""
+    target, rules = read_config(config)
+    click.echo('%s: ok, %d rules' % (config, len(rules)))

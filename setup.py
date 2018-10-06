@@ -6,7 +6,7 @@ setup(
     description='Sort a downloads folder by rules in a YAML file',
     author='Trent Maziarz',
     packages=find_packages(exclude=['tests']),
-    install_requires=['PyYAML'],
+    install_requires=['PyYAML', 'click>=7.0'],
     entry_points={
         'console_scripts': ['tidyup = tidyup.cli:main'],
     },
