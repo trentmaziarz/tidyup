@@ -26,16 +26,20 @@ def main():
 @main.command()
 @click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
 @click.option('-n', '--dry-run', is_flag=True, help='show what would move and stop')
-def run(config, dry_run):
+@click.option('-v', '--verbose', is_flag=True, help='print every move')
+def run(config, dry_run, verbose):
     """Move files according to the rules."""
     target, rules = read_config(config)
+    if verbose:
+        click.echo('%d rules, target %s' % (len(rules), target))
     moves = mover.plan(target, rules)
     for src, dest in moves:
         if dry_run:
             click.echo('would move %s -> %s' % (src, dest))
             continue
         dest = mover.move(src, dest)
-        click.echo('%s -> %s' % (src, dest))
+        if verbose:
+            click.echo('%s -> %s' % (src, dest))
 
 
 @main.command()
