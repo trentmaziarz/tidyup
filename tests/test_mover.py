@@ -3,8 +3,6 @@ import os
 from tidyup import mover
 from tidyup.rules import Rule
 
-DL = '/tmp/tidyup-test'
-
 
 def test_unique_path(tmpdir):
     p = tmpdir.join('a.txt')
@@ -15,20 +13,21 @@ def test_unique_path(tmpdir):
     assert mover.unique_path(str(p)) == str(tmpdir.join('a (2).txt'))
 
 
-def test_plan_and_move():
-    open(os.path.join(DL, 'cat.jpg'), 'w').close()
-    open(os.path.join(DL, 'notes.txt'), 'w').close()
-    pics = os.path.join(DL, 'pics')
+def test_plan_and_move(tmpdir):
+    dl = tmpdir.mkdir('dl')
+    dl.join('cat.jpg').write('x')
+    dl.join('notes.txt').write('x')
+    pics = str(tmpdir.join('pics'))
     rules = [Rule('images', ['*.jpg'], pics)]
 
-    moves = mover.plan(DL, rules)
-    assert moves == [(os.path.join(DL, 'cat.jpg'), os.path.join(pics, 'cat.jpg'))]
+    moves = mover.plan(str(dl), rules)
+    assert moves == [(str(dl.join('cat.jpg')), os.path.join(pics, 'cat.jpg'))]
 
     for src, dest in moves:
         mover.move(src, dest)
     assert os.path.exists(os.path.join(pics, 'cat.jpg'))
-    assert not os.path.exists(os.path.join(DL, 'cat.jpg'))
-    assert os.path.exists(os.path.join(DL, 'notes.txt'))
+    assert not dl.join('cat.jpg').check()
+    assert dl.join('notes.txt').check()
 
 
 def test_move_never_overwrites(tmpdir):
