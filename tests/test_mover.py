@@ -40,3 +40,14 @@ def test_move_never_overwrites(tmpdir):
     assert final == str(out.join('a (1).txt'))
     assert out.join('a.txt').read() == 'old'
     assert out.join('a (1).txt').read() == 'new'
+
+
+def test_skips_dirs_and_dotfiles(tmpdir):
+    dl = tmpdir.mkdir('dl')
+    dl.mkdir('folder.jpg')
+    dl.join('.hidden.jpg').write('x')
+    dl.join('real.jpg').write('x')
+    rules = [Rule('images', ['*.jpg'], str(tmpdir.join('pics')))]
+
+    moves = mover.plan(str(dl), rules)
+    assert [os.path.basename(src) for src, dest in moves] == ['real.jpg']

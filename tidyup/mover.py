@@ -15,6 +15,8 @@ def unique_path(path):
 def candidates(target):
     for name in sorted(os.listdir(target)):
         path = os.path.join(target, name)
+        if name.startswith('.') or os.path.isdir(path):
+            continue
         yield path
 
 

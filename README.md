@@ -34,8 +34,8 @@ Each rule is checked seperately, in order. The first one that matches wins.
   created if it is missing.
 - older_than is in days, by modification time.
 
-If a file with the same name is already in dest the new one becomes
-"name (1).ext".
+Directories and dotfiles are never touched. If a file with the same
+name is already in dest the new one becomes "name (1).ext".
 
 ## Usage
 
