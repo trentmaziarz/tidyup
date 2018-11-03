@@ -41,6 +41,8 @@ def run(config, dry_run, verbose, recursive):
         dest = mover.move(src, dest)
         if verbose:
             click.echo('%s -> %s' % (src, dest))
+    click.echo('%d file%s %s' % (len(moves), '' if len(moves) == 1 else 's',
+                                 'would move' if dry_run else 'moved'))
 
 
 @main.command()
