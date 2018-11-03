@@ -27,12 +27,13 @@ def main():
 @click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
 @click.option('-n', '--dry-run', is_flag=True, help='show what would move and stop')
 @click.option('-v', '--verbose', is_flag=True, help='print every move')
-def run(config, dry_run, verbose):
+@click.option('-r', '--recursive', is_flag=True, help='go into subfolders')
+def run(config, dry_run, verbose, recursive):
     """Move files according to the rules."""
     target, rules = read_config(config)
     if verbose:
         click.echo('%d rules, target %s' % (len(rules), target))
-    moves = mover.plan(target, rules)
+    moves = mover.plan(target, rules, recursive)
     for src, dest in moves:
         if dry_run:
             click.echo('would move %s -> %s' % (src, dest))
