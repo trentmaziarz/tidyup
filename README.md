@@ -29,7 +29,7 @@ Lives at ~/.tidyup.yml unless you pass --config.
 
 Each rule is checked seperately, in order. The first one that matches wins.
 
-- match is one glob or a list of globs.
+- match is one glob or a list of globs, case insensitive.
 - dest is a folder. Relative paths are relative to target. It gets
   created if it is missing.
 - older_than is in days, by modification time.

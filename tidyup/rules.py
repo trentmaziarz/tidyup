@@ -19,7 +19,9 @@ class Rule(object):
 
     def matches(self, path):
         name = os.path.basename(path)
-        if not any(fnmatch.fnmatch(name, p) for p in self.patterns):
+        # fnmatch.fnmatch only ignores case on windows
+        name = name.lower()
+        if not any(fnmatch.fnmatchcase(name, p.lower()) for p in self.patterns):
             return False
         if self.older_than is not None:
             age = (time.time() - os.path.getmtime(path)) / 86400.0

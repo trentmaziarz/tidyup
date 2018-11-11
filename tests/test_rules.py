@@ -89,3 +89,9 @@ rules:
 """)
     with pytest.raises(ConfigError):
         load(path)
+
+
+def test_case_insensitive():
+    r = Rule('x', ['*.JPG'], '/tmp')
+    assert r.matches('photo.jpg')
+    assert r.matches('PHOTO.Jpg')
