@@ -12,25 +12,18 @@ def unique_path(path):
     return path
 
 
-def candidates(target, recursive=False):
-    if not recursive:
-        for name in sorted(os.listdir(target)):
-            path = os.path.join(target, name)
-            if name.startswith('.') or os.path.isdir(path):
-                continue
-            yield path
-        return
-    for root, dirs, files in os.walk(target):
-        dirs[:] = [d for d in dirs if not d.startswith('.')]
-        for name in sorted(files):
-            if not name.startswith('.'):
-                yield os.path.join(root, name)
+def candidates(target):
+    for name in sorted(os.listdir(target)):
+        path = os.path.join(target, name)
+        if name.startswith('.') or os.path.isdir(path):
+            continue
+        yield path
 
 
-def plan(target, rules, recursive=False):
+def plan(target, rules):
     """list of (src, dest) for everything a rule wants moved"""
     moves = []
-    for path in candidates(target, recursive):
+    for path in candidates(target):
         for rule in rules:
             if rule.matches(path):
                 moves.append((path, os.path.join(rule.dest, os.path.basename(path))))
