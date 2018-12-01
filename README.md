@@ -25,7 +25,7 @@ Lives at ~/.tidyup.yml unless you pass --config.
       - name: old installers
         match: ["*.exe", "*.msi", "*.deb"]
         older_than: 30
-        dest: ~/Downloads/old
+        dest: trash
 
 Each rule is checked seperately, in order. The first one that matches wins.
 
@@ -33,6 +33,8 @@ Each rule is checked seperately, in order. The first one that matches wins.
 - dest is a folder. Relative paths are relative to target. It gets
   created if it is missing.
 - older_than is in days, by modification time.
+- dest: trash moves the file to .tidyup-trash inside target. Nothing
+  is ever deleted.
 
 Directories and dotfiles are never touched. If a file with the same
 name is already in dest the new one becomes "name (1).ext".

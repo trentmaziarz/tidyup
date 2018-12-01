@@ -4,6 +4,8 @@ import time
 
 import yaml
 
+TRASH = '.tidyup-trash'
+
 
 class ConfigError(Exception):
     pass
@@ -50,6 +52,8 @@ def load(path):
         if isinstance(patterns, str):
             patterns = [patterns]
         dest = r['dest']
+        if dest == 'trash':
+            dest = TRASH
         dest = os.path.expanduser(dest)
         if not os.path.isabs(dest):
             dest = os.path.join(target, dest)

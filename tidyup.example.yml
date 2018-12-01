@@ -12,4 +12,4 @@ rules:
   - name: old installers
     match: ["*.exe", "*.msi", "*.deb"]
     older_than: 30
-    dest: ~/Downloads/old
+    dest: trash

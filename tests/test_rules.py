@@ -95,3 +95,14 @@ def test_case_insensitive():
     r = Rule('x', ['*.JPG'], '/tmp')
     assert r.matches('photo.jpg')
     assert r.matches('PHOTO.Jpg')
+
+
+def test_trash_dest(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - match: "*.exe"
+    dest: trash
+""")
+    target, rules = load(path)
+    assert rules[0].dest == '/tmp/dl/.tidyup-trash'
