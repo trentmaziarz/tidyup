@@ -12,7 +12,7 @@ Needs python 3.
 
 ## Rules file
 
-Lives at ~/.tidyup.yml unless you pass --config.
+Lives at ~/.tidyup.yml unless you pass --config or set TIDYUP_CONFIG.
 
     target: ~/Downloads
     rules:

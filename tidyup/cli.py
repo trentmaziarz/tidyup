@@ -24,7 +24,7 @@ def main():
 
 
 @main.command()
-@click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
+@click.option('-c', '--config', default=DEFAULT_CONFIG, envvar='TIDYUP_CONFIG', help='rules file')
 @click.option('-n', '--dry-run', is_flag=True, help='show what would move and stop')
 @click.option('-v', '--verbose', is_flag=True, help='print every move')
 def run(config, dry_run, verbose):
@@ -45,7 +45,7 @@ def run(config, dry_run, verbose):
 
 
 @main.command()
-@click.option('-c', '--config', default=DEFAULT_CONFIG, help='rules file')
+@click.option('-c', '--config', default=DEFAULT_CONFIG, envvar='TIDYUP_CONFIG', help='rules file')
 def check(config):
     """Validate the rules file and exit."""
     target, rules = read_config(config)
