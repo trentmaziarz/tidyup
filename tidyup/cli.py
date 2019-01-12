@@ -1,4 +1,5 @@
 import os
+import time
 
 import click
 
@@ -17,6 +18,11 @@ def read_config(path):
         raise click.ClickException('%s: %s' % (path, e.strerror))
 
 
+def log_move(logfile, src, dest):
+    with open(os.path.expanduser(logfile), 'a') as f:
+        f.write('%s %s -> %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), src, dest))
+
+
 @click.group()
 @click.version_option(__version__)
 def main():
@@ -27,12 +33,14 @@ def main():
 @click.option('-c', '--config', default=DEFAULT_CONFIG, envvar='TIDYUP_CONFIG', help='rules file')
 @click.option('-n', '--dry-run', is_flag=True, help='show what would move and stop')
 @click.option('-v', '--verbose', is_flag=True, help='print every move')
-def run(config, dry_run, verbose):
+@click.option('--log', 'logfile', type=click.Path(), help='append moves to this file')
+def run(config, dry_run, verbose, logfile):
     """Move files according to the rules."""
     target, rules = read_config(config)
     if verbose:
         click.echo('%d rules, target %s' % (len(rules), target))
     moves = mover.plan(target, rules)
+    # TODO call log_move
     for src, dest in moves:
         if dry_run:
             click.echo('would move %s -> %s' % (src, dest))
