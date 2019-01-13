@@ -40,7 +40,6 @@ def run(config, dry_run, verbose, logfile):
     if verbose:
         click.echo('%d rules, target %s' % (len(rules), target))
     moves = mover.plan(target, rules)
-    # TODO call log_move
     for src, dest in moves:
         if dry_run:
             click.echo('would move %s -> %s' % (src, dest))
@@ -48,6 +47,8 @@ def run(config, dry_run, verbose, logfile):
         dest = mover.move(src, dest)
         if verbose:
             click.echo('%s -> %s' % (src, dest))
+        if logfile:
+            log_move(logfile, src, dest)
     click.echo('%d file%s %s' % (len(moves), '' if len(moves) == 1 else 's',
                                  'would move' if dry_run else 'moved'))
 

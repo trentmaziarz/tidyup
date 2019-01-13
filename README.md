@@ -43,7 +43,7 @@ name is already in dest the new one becomes "name (1).ext".
 
     tidyup run --dry-run     # show what would move
     tidyup run               # do it
-    tidyup run -v            # print every move
+    tidyup run -v --log ~/.tidyup.log
     tidyup check             # validate the rules file
 
 ## Tests
