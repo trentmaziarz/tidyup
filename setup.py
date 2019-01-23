@@ -8,6 +8,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests']),
     install_requires=['PyYAML', 'click>=7.0'],
+    python_requires='>=3.6',
     entry_points={
         'console_scripts': ['tidyup = tidyup.cli:main'],
     },

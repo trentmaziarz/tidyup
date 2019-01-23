@@ -4,7 +4,7 @@ Sorts a downloads folder by rules in a YAML file.
 
 ## Install
 
-Needs python 3.
+Python 3.6 or newer.
 
     git clone <this repo>
     cd tidyup
