@@ -52,6 +52,7 @@ def load(path):
         if isinstance(patterns, str):
             patterns = [patterns]
         dest = r['dest']
+        dest = dest.rstrip('/')
         if dest == 'trash':
             dest = TRASH
         dest = os.path.expanduser(dest)
