@@ -106,3 +106,14 @@ rules:
 """)
     target, rules = load(path)
     assert rules[0].dest == '/tmp/dl/.tidyup-trash'
+
+
+def test_trailing_slash(tmpdir):
+    path = write(tmpdir, """
+target: /tmp/dl
+rules:
+  - match: "*.jpg"
+    dest: /tmp/pics/
+""")
+    target, rules = load(path)
+    assert rules[0].dest == '/tmp/pics'
