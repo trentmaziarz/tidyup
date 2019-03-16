@@ -34,7 +34,7 @@ class Rule(object):
 
 def load(path):
     with open(path) as f:
-        data = yaml.load(f)
+        data = yaml.safe_load(f)
     if not isinstance(data, dict):
         raise ConfigError('%s: expected a mapping at the top level' % path)
     if 'target' not in data:
