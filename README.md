@@ -27,7 +27,7 @@ Lives at ~/.tidyup.yml unless you pass --config or set TIDYUP_CONFIG.
         older_than: 30
         dest: trash
 
-Each rule is checked seperately, in order. The first one that matches wins.
+Each rule is checked separately, in order. The first one that matches wins.
 
 - match is one glob or a list of globs, case insensitive.
 - dest is a folder. Relative paths are relative to target. It gets
