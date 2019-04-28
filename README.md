@@ -1,5 +1,8 @@
 # tidyup
 
+**Not maintained.** I stopped using this in 2019. A cron job with three
+mv lines does the same thing for me now. It still works as far as I know.
+
 Sorts a downloads folder by rules in a YAML file.
 
 ## Install
