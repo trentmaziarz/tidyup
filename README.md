@@ -53,3 +53,5 @@ name is already in dest the new one becomes "name (1).ext".
 
     pip3 install --user -r requirements-dev.txt
     make test
+
+Moved here from my Gitea box in 2026. Issue numbers in old commits point at the old tracker.
